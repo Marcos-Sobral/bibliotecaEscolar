@@ -1,0 +1,20 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void {
+        Schema::create('perfil', function (Blueprint $table) {
+            $table->id('idperfil');
+            $table->enum('tipoPerfil', ['Aluno', 'Professor', 'Bibliotecário', 'Visitante', 'Segurança', 'ASG', 'Merendeira'])->nullable();
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void {
+        Schema::dropIfExists('perfil');
+    }
+};
