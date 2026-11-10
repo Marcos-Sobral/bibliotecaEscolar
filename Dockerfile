@@ -1,13 +1,15 @@
 FROM richarvey/nginx-php-fpm:latest
 
-# Instala Node.js (versão 20 LTS) e NPM atualizados
-RUN apk add --update nodejs npm
+# Adiciona o repositório community do Alpine e instala o Node.js v20
+RUN echo "https://dl-cdn.alpinelinux.org/alpine/v3.20/community" >> /etc/apk/repositories \
+    && apk update \
+    && apk add --no-cache nodejs~=20 npm
 
 # Copia os arquivos do projeto para dentro do container
 COPY . .
 
-# Roda o npm com verbosidade para sabermos se o erro é de dependência
-RUN npm install --include=dev && npm run build
+# Compila os assets do frontend (Vite / Tailwind / JS)
+RUN npm install && npm run build
 
 # Configurações do ambiente PHP/Nginx da imagem
 ENV SKIP_COMPOSER 1
