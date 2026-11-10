@@ -1,9 +1,13 @@
 FROM richarvey/nginx-php-fpm:latest
 
-# Adiciona o repositório community do Alpine e instala o Node.js v20
-RUN echo "https://dl-cdn.alpinelinux.org/alpine/v3.20/community" >> /etc/apk/repositories \
-    && apk update \
-    && apk add --no-cache nodejs~=20 npm
+# Instala ferramentas necessárias para baixar o Node.js oficial
+RUN apk add --no-cache curl tar
+
+# Baixa e instala o Node.js v20 (LTS) diretamente do binário oficial
+ENV NODE_VERSION=20.12.2
+RUN curl -fsSL https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz -o node.tar.xz \
+    && tar -xJf node.tar.xz -C /usr/local --strip-components=1 \
+    && rm node.tar.xz
 
 # Copia os arquivos do projeto para dentro do container
 COPY . .
