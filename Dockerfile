@@ -1,13 +1,7 @@
 FROM richarvey/nginx-php-fpm:latest
 
-# Instala ferramentas necessárias para baixar o Node.js oficial
-RUN apk add --no-cache curl tar
-
-# Baixa e instala o Node.js v20 (LTS) diretamente do binário oficial
-ENV NODE_VERSION=20.12.2
-RUN curl -fsSL https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz -o node.tar.xz \
-    && tar -xJf node.tar.xz -C /usr/local --strip-components=1 \
-    && rm node.tar.xz
+# Instala compatibilidade libc e o Node.js/NPM oficial do repositório do Alpine
+RUN apk add --no-cache libc6-compat nodejs npm
 
 # Copia os arquivos do projeto para dentro do container
 COPY . .
